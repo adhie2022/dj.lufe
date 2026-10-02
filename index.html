@@ -1026,44 +1026,101 @@
           <!-- Console Status & Controls -->
           <div class="md:col-span-7 flex flex-col justify-center">
             
-            <div class="flex items-center gap-2 mb-3">
-              <span id="deck-status-dot" class="w-2.5 h-2.5 rounded-full bg-cyber-cyan animate-ping"></span>
-              <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-cyber-cyan">Sonic Console &bull; Live Session</span>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span id="deck-status-dot" class="w-2.5 h-2.5 rounded-full bg-gray-500"></span>
+                <span class="text-[11px] font-mono uppercase tracking-[0.25em] text-cyber-cyan">Sonic Console &bull; Live Player</span>
+              </div>
+              <span id="player-track-genre" class="text-[10px] font-mono uppercase tracking-widest text-cyber-gold px-2.5 py-1 rounded-md bg-cyber-gold/10 border border-cyber-gold/30">Future EDM</span>
             </div>
             
-            <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-wide text-white mb-2">
-              PRECISION AUDIO ARCHITECTURE
+            <h3 id="player-track-title" class="font-display text-2xl sm:text-3xl font-bold tracking-wide text-white mb-2">
+              DJ LUFE EDM Vibes
             </h3>
             
-            <p class="text-sm text-cyber-silver font-light leading-relaxed mb-6">
-              Interactive tactile motion module. Tap the turntable to pause or resume disc rotation and witness the dynamic responsive frequency meter.
+            <p class="text-sm text-cyber-silver font-light leading-relaxed mb-5">
+              Official high-fidelity live mix showcase. Select a track below or tap the vinyl deck to play, pause, or switch beats in real-time.
             </p>
 
-            <!-- Console Status Monitor Panel -->
-            <div class="p-4 rounded-xl bg-black/60 border border-cyber-cyan/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <p class="text-[10px] uppercase tracking-widest text-cyber-silver font-mono">BPM Display</p>
-                <div class="flex items-baseline gap-2">
-                  <span id="bpm-display" class="font-mono text-2xl font-bold text-cyber-chrome">128.0</span>
-                  <span class="text-xs text-cyber-cyan font-mono">BPM</span>
+            <!-- Hidden Audio Engine -->
+            <audio id="main-audio-player" preload="metadata" src="assets/music/dj-lufe-edm-vibes.mp3"></audio>
+
+            <!-- Track Selector Tabs -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <button 
+                onclick="switchTrack(0)" 
+                id="track-btn-0" 
+                class="p-3 rounded-xl border border-cyber-cyan bg-cyber-cyan/15 text-white flex items-center justify-between transition-all text-left group cursor-pointer"
+              >
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-cyber-cyan tracking-wider">Track 01</span>
+                  <span class="block text-xs font-bold font-display tracking-wide group-hover:text-cyber-cyan">EDM Vibes</span>
+                </div>
+                <span class="text-[10px] font-mono text-cyber-silver">128 BPM</span>
+              </button>
+
+              <button 
+                onclick="switchTrack(1)" 
+                id="track-btn-1" 
+                class="p-3 rounded-xl border border-white/15 bg-black/50 text-cyber-silver hover:border-cyber-cyan/50 flex items-center justify-between transition-all text-left group cursor-pointer"
+              >
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-cyber-silver tracking-wider">Track 02</span>
+                  <span class="block text-xs font-bold font-display tracking-wide text-white group-hover:text-cyber-cyan">Vinyl Breaks</span>
+                </div>
+                <span class="text-[10px] font-mono text-cyber-silver">124 BPM</span>
+              </button>
+            </div>
+
+            <!-- Console Status & Playback Control Bar -->
+            <div class="p-4 rounded-xl bg-black/80 border border-cyber-cyan/30 flex flex-col gap-3 shadow-inner">
+              
+              <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <!-- Play / Pause Main Button -->
+                  <button 
+                    id="toggle-turntable-btn" 
+                    onclick="togglePlay()" 
+                    class="w-11 h-11 rounded-xl bg-cyber-cyan text-black hover:bg-white flex items-center justify-center transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] group cursor-pointer"
+                    aria-label="Play or Pause Audio"
+                  >
+                    <svg id="play-icon" class="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pause-icon" class="w-5 h-5 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                  </button>
+
+                  <div>
+                    <span id="bpm-display" class="font-mono text-xl font-bold text-cyber-chrome block leading-none">128.0 <span class="text-xs text-cyber-cyan font-normal">BPM</span></span>
+                    <span id="time-display" class="text-[11px] font-mono text-cyber-silver">0:00 / 0:00</span>
+                  </div>
+                </div>
+
+                <!-- Animated Equalizer Spectrum Bars -->
+                <div class="flex items-end gap-1.5 h-9 px-2 opacity-40 transition-opacity duration-300" id="deck-eq-bars">
+                  <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-4"></span>
+                  <span class="w-1.5 bg-cyber-violet rounded-t-sm h-7"></span>
+                  <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-9"></span>
+                  <span class="w-1.5 bg-cyber-magenta rounded-t-sm h-6"></span>
+                  <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-8"></span>
+                  <span class="w-1.5 bg-cyber-gold rounded-t-sm h-5"></span>
+                  <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-10"></span>
+                  <span class="w-1.5 bg-cyber-violet rounded-t-sm h-4"></span>
                 </div>
               </div>
 
-              <!-- Animated Equalizer Spectrum Bars -->
-              <div class="flex items-end gap-1.5 h-10 px-2" id="deck-eq-bars">
-                <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-4"></span>
-                <span class="w-1.5 bg-cyber-violet rounded-t-sm h-7"></span>
-                <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-9"></span>
-                <span class="w-1.5 bg-cyber-magenta rounded-t-sm h-6"></span>
-                <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-8"></span>
-                <span class="w-1.5 bg-cyber-gold rounded-t-sm h-5"></span>
-                <span class="w-1.5 bg-cyber-cyan rounded-t-sm h-10"></span>
-                <span class="w-1.5 bg-cyber-violet rounded-t-sm h-4"></span>
+              <!-- Seek Bar -->
+              <div class="relative w-full flex items-center gap-2 pt-1">
+                <input 
+                  type="range" 
+                  id="audio-seek-bar" 
+                  value="0" 
+                  min="0" 
+                  max="100" 
+                  step="0.1" 
+                  oninput="seekAudio(this.value)"
+                  class="w-full h-1.5 bg-white/15 rounded-lg appearance-none cursor-pointer accent-cyber-cyan focus:outline-none"
+                />
               </div>
 
-              <button id="toggle-turntable-btn" class="px-4 py-2 rounded-lg border border-cyber-cyan/40 text-xs font-mono tracking-wider text-cyber-cyan hover:bg-cyber-cyan hover:text-black transition-colors">
-                PAUSE ROTATION
-              </button>
             </div>
 
           </div>
@@ -2165,54 +2222,173 @@
     }
 
     /**
-     * Interactive DJ Turntable Console with Dynamic Activation Sequence
+     * Interactive DJ Turntable & Audio Player Engine
      */
+    const PLAYLIST = [
+      {
+        id: 'track-0',
+        title: 'DJ LUFE EDM Vibes',
+        genre: 'Future EDM / Mainstage',
+        bpm: '128.0',
+        src: 'assets/music/dj-lufe-edm-vibes.mp3'
+      },
+      {
+        id: 'track-1',
+        title: 'DJ LUFE Vinyl Breaks',
+        genre: 'Cyber Funk & Vinyl Breaks',
+        bpm: '124.0',
+        src: 'assets/music/dj-lufe-vinyl-breaks.mp3'
+      }
+    ];
+
+    let currentTrackIdx = 0;
+    const mainAudio = document.getElementById('main-audio-player');
     const vinylDisc = document.getElementById('vinyl-disc');
     const toggleTurntableBtn = document.getElementById('toggle-turntable-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
     const deckEqBars = document.getElementById('deck-eq-bars');
     const deckRingGlow = document.getElementById('deck-ring-glow');
-    let isSpinning = true;
+    const deckStatusDot = document.getElementById('deck-status-dot');
+    const bpmDisplay = document.getElementById('bpm-display');
+    const trackTitleDisplay = document.getElementById('player-track-title');
+    const trackGenreDisplay = document.getElementById('player-track-genre');
+    const timeDisplay = document.getElementById('time-display');
+    const seekBar = document.getElementById('audio-seek-bar');
 
-    function toggleTurntable(e) {
-      isSpinning = !isSpinning;
-      
-      // Dynamic activation ring burst
-      if (deckRingGlow) {
-        deckRingGlow.style.transition = 'box-shadow 0.15s ease, border-color 0.15s ease';
-        deckRingGlow.style.boxShadow = isSpinning 
-          ? '0 0 50px rgba(0,229,255,0.7), inset 0 0 25px rgba(122,44,255,0.5)' 
-          : '0 0 10px rgba(0,229,255,0.15)';
-        deckRingGlow.style.borderColor = isSpinning ? '#00E5FF' : 'rgba(0,229,255,0.2)';
-        
-        setTimeout(() => {
-          deckRingGlow.style.boxShadow = isSpinning 
-            ? '0 0 35px rgba(0,229,255,0.25)' 
-            : '0 0 12px rgba(0,229,255,0.1)';
-        }, 400);
-      }
+    let isPlaying = false;
 
-      if (vinylDisc) {
-        if (isSpinning) {
-          vinylDisc.classList.remove('paused');
-          if (toggleTurntableBtn) toggleTurntableBtn.textContent = 'PAUSE ROTATION';
-          if (deckEqBars) {
-            deckEqBars.style.opacity = '1';
-            deckEqBars.animate([
-              { transform: 'scaleY(1.35)' },
-              { transform: 'scaleY(1)' }
-            ], { duration: 300, easing: 'ease-out' });
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "0:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function updatePlayerUI() {
+      const track = PLAYLIST[currentTrackIdx];
+      if (trackTitleDisplay) trackTitleDisplay.textContent = track.title;
+      if (trackGenreDisplay) trackGenreDisplay.textContent = track.genre;
+      if (bpmDisplay) bpmDisplay.innerHTML = `${track.bpm} <span class="text-xs text-cyber-cyan font-normal">BPM</span>`;
+
+      PLAYLIST.forEach((t, i) => {
+        const btn = document.getElementById(`track-btn-${i}`);
+        if (btn) {
+          if (i === currentTrackIdx) {
+            btn.className = "p-3 rounded-xl border border-cyber-cyan bg-cyber-cyan/15 text-white flex items-center justify-between transition-all text-left group cursor-pointer";
+          } else {
+            btn.className = "p-3 rounded-xl border border-white/15 bg-black/50 text-cyber-silver hover:border-cyber-cyan/50 flex items-center justify-between transition-all text-left group cursor-pointer";
           }
-        } else {
-          vinylDisc.classList.add('paused');
-          if (toggleTurntableBtn) toggleTurntableBtn.textContent = 'RESUME ROTATION';
-          if (deckEqBars) deckEqBars.style.opacity = '0.35';
         }
+      });
+    }
+
+    function togglePlay() {
+      if (!mainAudio) return;
+
+      if (mainAudio.paused) {
+        mainAudio.play().then(() => {
+          setPlaybackState(true);
+        }).catch(err => {
+          console.warn("Audio play prevented:", err);
+        });
+      } else {
+        mainAudio.pause();
+        setPlaybackState(false);
       }
     }
 
-    if (toggleTurntableBtn) toggleTurntableBtn.addEventListener('click', toggleTurntable);
+    function toggleTurntable() {
+      togglePlay();
+    }
+
+    function setPlaybackState(playing) {
+      isPlaying = playing;
+
+      if (playIcon && pauseIcon) {
+        if (playing) {
+          playIcon.classList.add('hidden');
+          pauseIcon.classList.remove('hidden');
+        } else {
+          playIcon.classList.remove('hidden');
+          pauseIcon.classList.add('hidden');
+        }
+      }
+
+      if (vinylDisc) {
+        if (playing) {
+          vinylDisc.classList.remove('paused');
+        } else {
+          vinylDisc.classList.add('paused');
+        }
+      }
+
+      if (deckEqBars) {
+        deckEqBars.style.opacity = playing ? '1' : '0.4';
+      }
+
+      if (deckStatusDot) {
+        if (playing) {
+          deckStatusDot.classList.add('animate-ping', 'bg-cyber-cyan');
+          deckStatusDot.classList.remove('bg-gray-500');
+        } else {
+          deckStatusDot.classList.remove('animate-ping', 'bg-cyber-cyan');
+          deckStatusDot.classList.add('bg-gray-500');
+        }
+      }
+
+      if (deckRingGlow) {
+        deckRingGlow.style.boxShadow = playing 
+          ? '0 0 45px rgba(0,229,255,0.4), inset 0 0 20px rgba(122,44,255,0.3)' 
+          : '0 0 15px rgba(0,229,255,0.15)';
+      }
+    }
+
+    function switchTrack(index) {
+      if (index === currentTrackIdx && mainAudio && !mainAudio.paused) return;
+      currentTrackIdx = index;
+      const track = PLAYLIST[currentTrackIdx];
+
+      if (mainAudio) {
+        mainAudio.src = track.src;
+        mainAudio.currentTime = 0;
+        updatePlayerUI();
+        mainAudio.play().then(() => {
+          setPlaybackState(true);
+        }).catch(err => {
+          setPlaybackState(false);
+        });
+      }
+    }
+
+    function seekAudio(percent) {
+      if (mainAudio && mainAudio.duration) {
+        mainAudio.currentTime = (percent / 100) * mainAudio.duration;
+      }
+    }
+
+    if (mainAudio) {
+      mainAudio.addEventListener('timeupdate', () => {
+        if (!isNaN(mainAudio.duration)) {
+          const progress = (mainAudio.currentTime / mainAudio.duration) * 100;
+          if (seekBar) seekBar.value = progress;
+          if (timeDisplay) {
+            timeDisplay.textContent = `${formatTime(mainAudio.currentTime)} / ${formatTime(mainAudio.duration)}`;
+          }
+        }
+      });
+
+      mainAudio.addEventListener('ended', () => {
+        const nextIdx = (currentTrackIdx + 1) % PLAYLIST.length;
+        switchTrack(nextIdx);
+      });
+    }
+
     const jogWheelContainer = document.getElementById('jog-wheel-container');
     if (jogWheelContainer) jogWheelContainer.addEventListener('click', toggleTurntable);
+
+    updatePlayerUI();
+    if (vinylDisc) vinylDisc.classList.add('paused');
 
     /**
      * Photo Gallery Lightbox Implementation (Strict Contain Mode)
